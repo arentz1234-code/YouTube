@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GolfCoast Pilot | Social Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="plane plane-1"><i class="fas fa-plane"></i></div>
+        <div class="plane plane-2"><i class="fas fa-plane"></i></div>
+        <div class="plane plane-3"><i class="fas fa-plane"></i></div>
+        <div class="cloud cloud-1"><i class="fas fa-cloud"></i></div>
+        <div class="cloud cloud-2"><i class="fas fa-cloud"></i></div>
+        <div class="cloud cloud-3"><i class="fas fa-cloud"></i></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-plane-departure"></i>
+            <span>GolfCoast Pilot</span>
+        </div>
+        <div class="nav-links">
+            <a href="#home" class="active">Home</a>
+            <a href="#stats">Stats</a>
+            <a href="#videos">Videos</a>
+            <a href="#instagram">Instagram</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="nav-social">
+            <a href="https://youtube.com/@golfcoastpilot" target="_blank" class="social-link youtube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://instagram.com/golfcoastpilot" target="_blank" class="social-link instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+        <button class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="glitch" data-text="GolfCoast Pilot">GolfCoast Pilot</h1>
+                <p class="tagline">Taking you to new heights, one flight at a time</p>
+                <div class="hero-buttons">
+                    <a href="https://youtube.com/@golfcoastpilot" target="_blank" class="btn btn-youtube">
+                        <i class="fab fa-youtube"></i> Subscribe
+                    </a>
+                    <a href="https://instagram.com/golfcoastpilot" target="_blank" class="btn btn-instagram">
+                        <i class="fab fa-instagram"></i> Follow
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="profile-ring">
+                    <div class="profile-placeholder">
+                        <i class="fas fa-user-pilot"></i>
+                        <span>GCP</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll Down</span>
+            <i class="fas fa-chevron-down"></i>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="stats" class="stats-section">
+        <h2 class="section-title">
+            <i class="fas fa-chart-line"></i>
+            Live Stats
+        </h2>
+        <div class="stats-grid">
+            <div class="stat-card youtube-card">
+                <div class="stat-icon">
+                    <i class="fab fa-youtube"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="youtube-subs">
+                        <span class="counter" data-target="0">0</span>
+                    </div>
+                    <div class="stat-label">YouTube Subscribers</div>
+                </div>
+                <div class="stat-badge">
+                    <i class="fas fa-arrow-up"></i>
+                    <span id="youtube-growth">Loading...</span>
+                </div>
+            </div>
+            <div class="stat-card instagram-card">
+                <div class="stat-icon">
+                    <i class="fab fa-instagram"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="instagram-followers">
+                        <span class="counter" data-target="0">0</span>
+                    </div>
+                    <div class="stat-label">Instagram Followers</div>
+                </div>
+                <div class="stat-badge">
+                    <i class="fas fa-heart"></i>
+                    <span id="instagram-engagement">Loading...</span>
+                </div>
+            </div>
+            <div class="stat-card views-card">
+                <div class="stat-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="total-views">
+                        <span class="counter" data-target="0">0</span>
+                    </div>
+                    <div class="stat-label">Total Views</div>
+                </div>
+                <div class="stat-badge">
+                    <i class="fas fa-play"></i>
+                    <span>All Time</span>
+                </div>
+            </div>
+            <div class="stat-card videos-card">
+                <div class="stat-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-number" id="total-videos">
+                        <span class="counter" data-target="0">0</span>
+                    </div>
+                    <div class="stat-label">Videos Uploaded</div>
+                </div>
+                <div class="stat-badge">
+                    <i class="fas fa-film"></i>
+                    <span>Content</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Popular Videos Section -->
+    <section id="videos" class="videos-section">
+        <h2 class="section-title">
+            <i class="fas fa-fire"></i>
+            Most Popular Videos
+        </h2>
+        <div class="videos-grid" id="videos-container">
+            <div class="video-skeleton">
+                <div class="skeleton-thumb"></div>
+                <div class="skeleton-info">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+            </div>
+            <div class="video-skeleton">
+                <div class="skeleton-thumb"></div>
+                <div class="skeleton-info">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+            </div>
+            <div class="video-skeleton">
+                <div class="skeleton-thumb"></div>
+                <div class="skeleton-info">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-meta"></div>
+                </div>
+            </div>
+        </div>
+        <div class="videos-cta">
+            <a href="https://youtube.com/@golfcoastpilot" target="_blank" class="btn btn-outline">
+                <i class="fab fa-youtube"></i> View All Videos
+            </a>
+        </div>
+    </section>
+
+    <!-- Instagram Feed Section -->
+    <section id="instagram" class="instagram-section">
+        <h2 class="section-title">
+            <i class="fab fa-instagram"></i>
+            Instagram Feed
+        </h2>
+        <div class="instagram-grid" id="instagram-container">
+            <div class="insta-skeleton"></div>
+            <div class="insta-skeleton"></div>
+            <div class="insta-skeleton"></div>
+            <div class="insta-skeleton"></div>
+            <div class="insta-skeleton"></div>
+            <div class="insta-skeleton"></div>
+        </div>
+        <div class="instagram-cta">
+            <a href="https://instagram.com/golfcoastpilot" target="_blank" class="btn btn-gradient">
+                <i class="fab fa-instagram"></i> Follow on Instagram
+            </a>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <h2 class="section-title">
+            <i class="fas fa-paper-plane"></i>
+            Get In Touch
+        </h2>
+        <div class="contact-content">
+            <div class="contact-info">
+                <h3>Let's Connect!</h3>
+                <p>For collaborations, business inquiries, or just to say hi - reach out through any of my social channels!</p>
+                <div class="social-links-large">
+                    <a href="https://youtube.com/@golfcoastpilot" target="_blank" class="social-card youtube">
+                        <i class="fab fa-youtube"></i>
+                        <span>YouTube</span>
+                    </a>
+                    <a href="https://instagram.com/golfcoastpilot" target="_blank" class="social-card instagram">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                    <a href="mailto:contact@golfcoastpilot.com" class="social-card email">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email</span>
+                    </a>
+                </div>
+            </div>
+            <div class="newsletter">
+                <h3>Stay Updated</h3>
+                <p>Subscribe to get notified about new content and adventures!</p>
+                <form class="newsletter-form" id="newsletter-form">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-plane-departure"></i>
+                <span>GolfCoast Pilot</span>
+            </div>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#stats">Stats</a>
+                <a href="#videos">Videos</a>
+                <a href="#instagram">Instagram</a>
+            </div>
+            <div class="footer-social">
+                <a href="https://youtube.com/@golfcoastpilot" target="_blank"><i class="fab fa-youtube"></i></a>
+                <a href="https://instagram.com/golfcoastpilot" target="_blank"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 GolfCoast Pilot. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Interactive Elements -->
+    <div class="cursor-follower"></div>
+
+    <script src="script.js"></script>
+</body>
+</html>
