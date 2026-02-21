@@ -149,44 +149,59 @@ async function fetchYouTubeStats() {
     return null;
 }
 
-// ===== Fetch YouTube Popular Videos =====
+// ===== Parse duration to seconds =====
+function parseDurationToSeconds(isoDuration) {
+    const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+    if (!match) return 0;
+    const hours = parseInt(match[1]) || 0;
+    const minutes = parseInt(match[2]) || 0;
+    const seconds = parseInt(match[3]) || 0;
+    return hours * 3600 + minutes * 60 + seconds;
+}
+
+// ===== Fetch YouTube Videos (both long-form and Shorts) =====
 async function fetchYouTubeVideos() {
     try {
-        // First get video IDs from channel
+        // Fetch more videos to have enough for both sections
         const searchResponse = await fetch(
-            `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${YOUTUBE_CHANNEL_ID}&maxResults=6&order=viewCount&type=video&key=${YOUTUBE_API_KEY}`
+            `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${YOUTUBE_CHANNEL_ID}&maxResults=20&order=viewCount&type=video&key=${YOUTUBE_API_KEY}`
         );
         const searchData = await searchResponse.json();
 
         if (!searchData.items || searchData.items.length === 0) {
-            return [];
+            return { longForm: [], shorts: [] };
         }
 
-        // Get video IDs
         const videoIds = searchData.items.map(item => item.id.videoId).join(',');
 
-        // Fetch video details (for view counts and duration)
         const videosResponse = await fetch(
             `https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails,snippet&id=${videoIds}&key=${YOUTUBE_API_KEY}`
         );
         const videosData = await videosResponse.json();
 
-        return videosData.items.map(video => ({
+        const allVideos = videosData.items.map(video => ({
             id: video.id,
             title: video.snippet.title,
             thumbnail: video.snippet.thumbnails.high?.url || video.snippet.thumbnails.medium?.url,
             views: parseInt(video.statistics.viewCount),
             duration: formatDuration(video.contentDetails.duration),
+            durationSeconds: parseDurationToSeconds(video.contentDetails.duration),
             date: timeAgo(video.snippet.publishedAt),
             url: `https://www.youtube.com/watch?v=${video.id}`
         }));
+
+        // Separate long-form videos (> 60 seconds) from Shorts (<= 60 seconds)
+        const longForm = allVideos.filter(v => v.durationSeconds > 60).slice(0, 3);
+        const shorts = allVideos.filter(v => v.durationSeconds <= 60).slice(0, 4);
+
+        return { longForm, shorts };
     } catch (error) {
         console.error('Error fetching YouTube videos:', error);
     }
-    return [];
+    return { longForm: [], shorts: [] };
 }
 
-// ===== Render Videos =====
+// ===== Render Long Form Videos =====
 function renderVideos(videos) {
     const container = document.getElementById('videos-container');
     if (!container) return;
@@ -200,30 +215,42 @@ function renderVideos(videos) {
         <article class="video-card" onclick="window.open('${video.url}', '_blank')">
             <div class="video-thumb">
                 <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
-                <div class="video-overlay">
-                    <div class="play-btn">
-                        <i class="fas fa-play"></i>
-                    </div>
-                </div>
                 <span class="video-duration">${video.duration}</span>
             </div>
             <div class="video-info">
                 <h3 class="video-title">${video.title}</h3>
                 <div class="video-meta">
-                    <span><i class="fas fa-eye"></i> ${formatNumber(video.views)}</span>
-                    <span><i class="fas fa-clock"></i> ${video.date}</span>
+                    <span>${formatNumber(video.views)} views</span>
+                    <span>•</span>
+                    <span>${video.date}</span>
                 </div>
             </div>
         </article>
     `).join('');
+}
 
-    // Re-observe for animations
-    document.querySelectorAll('.video-card').forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-        observer.observe(el);
-    });
+// ===== Render Shorts =====
+function renderShorts(shorts) {
+    const container = document.getElementById('shorts-container');
+    if (!container) return;
+
+    if (shorts.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--gray-500);">Loading shorts...</p>';
+        return;
+    }
+
+    container.innerHTML = shorts.map(short => `
+        <article class="short-card" onclick="window.open('${short.url}', '_blank')">
+            <div class="short-thumb">
+                <img src="${short.thumbnail}" alt="${short.title}" loading="lazy">
+                <div class="short-overlay">
+                    <i class="fas fa-play"></i>
+                </div>
+                <span class="short-views">${formatNumber(short.views)}</span>
+            </div>
+            <h3 class="short-title">${short.title}</h3>
+        </article>
+    `).join('');
 }
 
 // ===== Instagram followers count (for hero stats) =====
@@ -283,15 +310,16 @@ const observer = new IntersectionObserver((entries) => {
 
 // ===== Initialize =====
 async function init() {
-    // Fetch and display YouTube data
-    const videos = await fetchYouTubeVideos();
-    renderVideos(videos);
+    // Fetch and display YouTube data (both long-form and Shorts)
+    const { longForm, shorts } = await fetchYouTubeVideos();
+    renderVideos(longForm);
+    renderShorts(shorts);
 
     // Update stats with animation
     await updateHeroStats();
 
     // Observe elements for animations
-    document.querySelectorAll('.product-card, .insta-post').forEach(el => {
+    document.querySelectorAll('.product-card, .insta-post, .video-card, .short-card').forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(20px)';
         el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';

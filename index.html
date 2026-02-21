@@ -115,18 +115,26 @@
     <!-- Videos Section -->
     <section id="videos" class="videos-section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-label">Latest Content</span>
-                <h2>Popular Videos</h2>
-                <p>Check out some of my most-watched aviation content</p>
+            <!-- Long Form Videos -->
+            <div class="youtube-row">
+                <div class="youtube-row-header">
+                    <h2><i class="fab fa-youtube"></i> Popular Videos</h2>
+                    <a href="https://youtube.com/@golfcoastpilot" target="_blank" class="view-all">View all <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="videos-grid" id="videos-container">
+                    <!-- Long form videos loaded via JavaScript -->
+                </div>
             </div>
-            <div class="videos-grid" id="videos-container">
-                <!-- Videos loaded via JavaScript -->
-            </div>
-            <div class="section-cta">
-                <a href="https://youtube.com/@golfcoastpilot" target="_blank" class="btn btn-outline">
-                    View All Videos <i class="fas fa-arrow-right"></i>
-                </a>
+
+            <!-- Shorts -->
+            <div class="youtube-row shorts-row">
+                <div class="youtube-row-header">
+                    <h2><i class="fas fa-bolt"></i> Shorts</h2>
+                    <a href="https://youtube.com/@golfcoastpilot/shorts" target="_blank" class="view-all">View all <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="shorts-grid" id="shorts-container">
+                    <!-- Shorts loaded via JavaScript -->
+                </div>
             </div>
         </div>
     </section>
