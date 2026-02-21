@@ -1,29 +1,4 @@
-// ===== GolfCoast Pilot - Interactive Social Hub =====
-
-// Configuration - Replace with your actual data
-const CONFIG = {
-    youtube: {
-        channelId: 'golfcoastpilot',
-        apiKey: '', // Add your YouTube API key here for live data
-    },
-    instagram: {
-        username: 'golfcoastpilot',
-        accessToken: '', // Add Instagram access token for live data
-    }
-};
-
-// ===== Custom Cursor =====
-const cursor = document.querySelector('.cursor-follower');
-
-document.addEventListener('mousemove', (e) => {
-    cursor.style.left = e.clientX - 10 + 'px';
-    cursor.style.top = e.clientY - 10 + 'px';
-});
-
-document.querySelectorAll('a, button, .video-card, .insta-post, .stat-card').forEach(el => {
-    el.addEventListener('mouseenter', () => cursor.classList.add('active'));
-    el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
-});
+// ===== Andrew Rentz - Aviation Content Creator =====
 
 // ===== Smooth Scroll Navigation =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -35,6 +10,8 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: 'smooth',
                 block: 'start'
             });
+            // Close mobile menu if open
+            document.querySelector('.nav-links')?.classList.remove('active');
         }
     });
 });
@@ -47,7 +24,6 @@ window.addEventListener('scroll', () => {
     let current = '';
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
         if (scrollY >= sectionTop - 200) {
             current = section.getAttribute('id');
         }
@@ -60,6 +36,41 @@ window.addEventListener('scroll', () => {
         }
     });
 });
+
+// ===== Navbar Background on Scroll =====
+const navbar = document.querySelector('.navbar');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+        navbar.style.background = 'var(--white)';
+        navbar.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+    } else {
+        navbar.style.background = 'rgba(255,255,255,0.95)';
+        navbar.style.boxShadow = 'none';
+    }
+});
+
+// ===== Mobile Menu Toggle =====
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const mobileNavLinks = document.querySelector('.nav-links');
+
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', () => {
+        mobileNavLinks.classList.toggle('active');
+        const icon = mobileMenuBtn.querySelector('i');
+        icon.classList.toggle('fa-bars');
+        icon.classList.toggle('fa-times');
+    });
+}
+
+// ===== Number Formatting =====
+function formatNumber(num) {
+    if (num >= 1000000) {
+        return (num / 1000000).toFixed(1) + 'M';
+    } else if (num >= 1000) {
+        return (num / 1000).toFixed(1) + 'K';
+    }
+    return num.toString();
+}
 
 // ===== Animated Counter =====
 function animateCounter(element, target, duration = 2000) {
@@ -79,195 +90,76 @@ function animateCounter(element, target, duration = 2000) {
     updateCounter();
 }
 
-function formatNumber(num) {
-    if (num >= 1000000) {
-        return (num / 1000000).toFixed(1) + 'M';
-    } else if (num >= 1000) {
-        return (num / 1000).toFixed(1) + 'K';
-    }
-    return num.toString();
-}
-
-// ===== Intersection Observer for Stats Animation =====
-const statsObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            const counters = entry.target.querySelectorAll('.counter');
-            counters.forEach(counter => {
-                const target = parseInt(counter.dataset.target);
-                animateCounter(counter, target);
-            });
-            statsObserver.unobserve(entry.target);
-        }
-    });
-}, { threshold: 0.5 });
-
-const statsSection = document.querySelector('.stats-section');
-if (statsSection) {
-    statsObserver.observe(statsSection);
-}
-
-// ===== Fetch YouTube Data =====
-async function fetchYouTubeData() {
-    // Demo data - Replace with actual API call when you have an API key
-    const demoData = {
-        subscriberCount: 15400,
-        viewCount: 2340000,
-        videoCount: 127,
+// ===== Demo Data =====
+const socialData = {
+    youtube: {
+        subscribers: 15400,
+        views: 2340000,
         videos: [
             {
-                id: 'video1',
                 title: 'Epic Gulf Coast Sunset Flight - 4K Cockpit View',
                 thumbnail: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&h=450&fit=crop',
                 views: 245000,
                 duration: '18:32',
-                publishedAt: '2 weeks ago'
+                date: '2 weeks ago'
             },
             {
-                id: 'video2',
                 title: 'Learning to Fly: My First Solo Flight Experience',
                 thumbnail: 'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=800&h=450&fit=crop',
                 views: 189000,
                 duration: '24:15',
-                publishedAt: '1 month ago'
+                date: '1 month ago'
             },
             {
-                id: 'video3',
-                title: 'Cessna 172 Complete Pre-Flight Checklist Tutorial',
+                title: 'Cessna 172 Complete Pre-Flight Checklist',
                 thumbnail: 'https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800&h=450&fit=crop',
                 views: 156000,
                 duration: '12:48',
-                publishedAt: '3 weeks ago'
+                date: '3 weeks ago'
             },
             {
-                id: 'video4',
                 title: 'Flying Through Weather: IFR Training Day',
                 thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=450&fit=crop',
                 views: 134000,
                 duration: '21:07',
-                publishedAt: '1 month ago'
+                date: '1 month ago'
             },
             {
-                id: 'video5',
                 title: 'Beach Landing! Exploring Remote Airstrips',
                 thumbnail: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=800&h=450&fit=crop',
                 views: 112000,
                 duration: '15:33',
-                publishedAt: '2 months ago'
+                date: '2 months ago'
             },
             {
-                id: 'video6',
-                title: 'Night Flying Over the City - Beautiful Lights',
+                title: 'Night Flying Over the City Lights',
                 thumbnail: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=800&h=450&fit=crop',
                 views: 98000,
                 duration: '19:22',
-                publishedAt: '2 months ago'
+                date: '2 months ago'
             }
         ]
-    };
-
-    // If you have a YouTube API key, uncomment and use this code:
-    /*
-    if (CONFIG.youtube.apiKey) {
-        try {
-            // Fetch channel stats
-            const channelResponse = await fetch(
-                `https://www.googleapis.com/youtube/v3/channels?part=statistics&forUsername=${CONFIG.youtube.channelId}&key=${CONFIG.youtube.apiKey}`
-            );
-            const channelData = await channelResponse.json();
-
-            // Fetch popular videos
-            const videosResponse = await fetch(
-                `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${channelData.items[0].id}&order=viewCount&maxResults=6&key=${CONFIG.youtube.apiKey}`
-            );
-            const videosData = await videosResponse.json();
-
-            // Process and return data
-            // ...
-        } catch (error) {
-            console.error('Error fetching YouTube data:', error);
-        }
-    }
-    */
-
-    return demoData;
-}
-
-// ===== Fetch Instagram Data =====
-async function fetchInstagramData() {
-    // Demo data - Replace with actual API call when you have access token
-    const demoData = {
-        followerCount: 8750,
+    },
+    instagram: {
+        followers: 8750,
         posts: [
-            {
-                id: 'post1',
-                image: 'https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=400&h=400&fit=crop',
-                likes: 1243,
-                comments: 89,
-                link: 'https://instagram.com/golfcoastpilot'
-            },
-            {
-                id: 'post2',
-                image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=400&h=400&fit=crop',
-                likes: 2156,
-                comments: 124,
-                link: 'https://instagram.com/golfcoastpilot'
-            },
-            {
-                id: 'post3',
-                image: 'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=400&h=400&fit=crop',
-                likes: 987,
-                comments: 56,
-                link: 'https://instagram.com/golfcoastpilot'
-            },
-            {
-                id: 'post4',
-                image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop',
-                likes: 1534,
-                comments: 78,
-                link: 'https://instagram.com/golfcoastpilot'
-            },
-            {
-                id: 'post5',
-                image: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop',
-                likes: 876,
-                comments: 45,
-                link: 'https://instagram.com/golfcoastpilot'
-            },
-            {
-                id: 'post6',
-                image: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=400&h=400&fit=crop',
-                likes: 1102,
-                comments: 67,
-                link: 'https://instagram.com/golfcoastpilot'
-            }
+            { image: 'https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=400&h=400&fit=crop', likes: 1243, comments: 89 },
+            { image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=400&h=400&fit=crop', likes: 2156, comments: 124 },
+            { image: 'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=400&h=400&fit=crop', likes: 987, comments: 56 },
+            { image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop', likes: 1534, comments: 78 },
+            { image: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop', likes: 876, comments: 45 },
+            { image: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=400&h=400&fit=crop', likes: 1102, comments: 67 }
         ]
-    };
-
-    // If you have Instagram access token, use the Instagram Basic Display API
-    /*
-    if (CONFIG.instagram.accessToken) {
-        try {
-            const response = await fetch(
-                `https://graph.instagram.com/me/media?fields=id,caption,media_type,media_url,thumbnail_url,permalink,timestamp&access_token=${CONFIG.instagram.accessToken}`
-            );
-            const data = await response.json();
-            // Process and return data
-        } catch (error) {
-            console.error('Error fetching Instagram data:', error);
-        }
     }
-    */
+};
 
-    return demoData;
-}
-
-// ===== Render YouTube Videos =====
-function renderVideos(videos) {
+// ===== Render Videos =====
+function renderVideos() {
     const container = document.getElementById('videos-container');
+    if (!container) return;
 
-    container.innerHTML = videos.slice(0, 6).map(video => `
-        <div class="video-card" onclick="window.open('https://youtube.com/@golfcoastpilot', '_blank')">
+    container.innerHTML = socialData.youtube.videos.map(video => `
+        <article class="video-card" onclick="window.open('https://youtube.com/@golfcoastpilot', '_blank')">
             <div class="video-thumb">
                 <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
                 <div class="video-overlay">
@@ -281,19 +173,20 @@ function renderVideos(videos) {
                 <h3 class="video-title">${video.title}</h3>
                 <div class="video-meta">
                     <span><i class="fas fa-eye"></i> ${formatNumber(video.views)}</span>
-                    <span><i class="fas fa-clock"></i> ${video.publishedAt}</span>
+                    <span><i class="fas fa-clock"></i> ${video.date}</span>
                 </div>
             </div>
-        </div>
+        </article>
     `).join('');
 }
 
 // ===== Render Instagram Posts =====
-function renderInstagramPosts(posts) {
+function renderInstagram() {
     const container = document.getElementById('instagram-container');
+    if (!container) return;
 
-    container.innerHTML = posts.map(post => `
-        <a href="${post.link}" target="_blank" class="insta-post">
+    container.innerHTML = socialData.instagram.posts.map(post => `
+        <a href="https://instagram.com/golfcoastpilot" target="_blank" class="insta-post">
             <img src="${post.image}" alt="Instagram post" loading="lazy">
             <div class="insta-overlay">
                 <span class="insta-stat"><i class="fas fa-heart"></i> ${formatNumber(post.likes)}</span>
@@ -303,183 +196,77 @@ function renderInstagramPosts(posts) {
     `).join('');
 }
 
-// ===== Update Stats Display =====
-function updateStats(youtubeData, instagramData) {
-    // Update YouTube subscribers
-    const youtubeSubs = document.querySelector('#youtube-subs .counter');
-    youtubeSubs.dataset.target = youtubeData.subscriberCount;
+// ===== Update Hero Stats =====
+function updateHeroStats() {
+    const subsEl = document.getElementById('hero-subs');
+    const followersEl = document.getElementById('hero-followers');
+    const viewsEl = document.getElementById('hero-views');
 
-    // Update Instagram followers
-    const instaFollowers = document.querySelector('#instagram-followers .counter');
-    instaFollowers.dataset.target = instagramData.followerCount;
-
-    // Update total views
-    const totalViews = document.querySelector('#total-views .counter');
-    totalViews.dataset.target = youtubeData.viewCount;
-
-    // Update video count
-    const videoCount = document.querySelector('#total-videos .counter');
-    videoCount.dataset.target = youtubeData.videoCount;
-
-    // Update badges
-    document.getElementById('youtube-growth').textContent = '+2.3% this month';
-    document.getElementById('instagram-engagement').textContent = '4.8% engagement';
+    if (subsEl) animateCounter(subsEl, socialData.youtube.subscribers);
+    if (followersEl) animateCounter(followersEl, socialData.instagram.followers);
+    if (viewsEl) animateCounter(viewsEl, socialData.youtube.views);
 }
 
-// ===== Newsletter Form =====
-const newsletterForm = document.getElementById('newsletter-form');
-if (newsletterForm) {
-    newsletterForm.addEventListener('submit', (e) => {
+// ===== Contact Form =====
+const contactForm = document.getElementById('contact-form');
+if (contactForm) {
+    contactForm.addEventListener('submit', (e) => {
         e.preventDefault();
-        const email = e.target.querySelector('input[type="email"]').value;
 
-        // Add your newsletter signup logic here
-        console.log('Newsletter signup:', email);
+        const button = contactForm.querySelector('button[type="submit"]');
+        const originalText = button.innerHTML;
 
-        // Show success message
-        const button = e.target.querySelector('button');
-        const originalHTML = button.innerHTML;
-        button.innerHTML = '<i class="fas fa-check"></i>';
-        button.style.background = '#4ade80';
+        button.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+        button.style.background = '#10b981';
 
         setTimeout(() => {
-            button.innerHTML = originalHTML;
+            button.innerHTML = originalText;
             button.style.background = '';
-            e.target.reset();
-        }, 2000);
+            contactForm.reset();
+        }, 3000);
     });
 }
 
-// ===== Mobile Menu Toggle =====
-const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-const navLinks = document.querySelector('.nav-links');
+// ===== Intersection Observer for Animations =====
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+};
 
-if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-
-        // Toggle menu icon
-        const icon = mobileMenuBtn.querySelector('i');
-        icon.classList.toggle('fa-bars');
-        icon.classList.toggle('fa-times');
-    });
-}
-
-// ===== Parallax Effect on Hero =====
-window.addEventListener('scroll', () => {
-    const scrolled = window.scrollY;
-    const hero = document.querySelector('.hero');
-    const heroContent = document.querySelector('.hero-content');
-
-    if (hero && heroContent && scrolled < window.innerHeight) {
-        heroContent.style.transform = `translateY(${scrolled * 0.3}px)`;
-        heroContent.style.opacity = 1 - (scrolled / window.innerHeight);
-    }
-});
-
-// ===== Tilt Effect on Cards =====
-function addTiltEffect(element) {
-    element.addEventListener('mousemove', (e) => {
-        const rect = element.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-
-        const rotateX = (y - centerY) / 10;
-        const rotateY = (centerX - x) / 10;
-
-        element.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-5px)`;
-    });
-
-    element.addEventListener('mouseleave', () => {
-        element.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
-    });
-}
-
-// Apply tilt effect to stat cards
-document.querySelectorAll('.stat-card').forEach(addTiltEffect);
-
-// ===== Typing Effect for Tagline =====
-function typeWriter(element, text, speed = 50) {
-    let i = 0;
-    element.textContent = '';
-
-    function type() {
-        if (i < text.length) {
-            element.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
         }
-    }
+    });
+}, observerOptions);
 
-    type();
-}
+// Observe elements for fade-in animation
+document.querySelectorAll('.video-card, .product-card, .insta-post').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+});
 
 // ===== Initialize =====
-async function init() {
-    try {
-        // Fetch social media data
-        const youtubeData = await fetchYouTubeData();
-        const instagramData = await fetchInstagramData();
+document.addEventListener('DOMContentLoaded', () => {
+    renderVideos();
+    renderInstagram();
 
-        // Update stats
-        updateStats(youtubeData, instagramData);
+    // Delay stats animation until hero is visible
+    setTimeout(updateHeroStats, 500);
 
-        // Render content
-        renderVideos(youtubeData.videos);
-        renderInstagramPosts(instagramData.posts);
-
-        // Add typing effect to tagline
-        const tagline = document.querySelector('.tagline');
-        if (tagline) {
-            const originalText = tagline.textContent;
-            setTimeout(() => {
-                typeWriter(tagline, originalText);
-            }, 500);
-        }
-
-    } catch (error) {
-        console.error('Error initializing:', error);
-    }
-}
-
-// Start the app
-document.addEventListener('DOMContentLoaded', init);
-
-// ===== Easter Egg - Konami Code =====
-const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-let konamiIndex = 0;
-
-document.addEventListener('keydown', (e) => {
-    if (e.key === konamiCode[konamiIndex]) {
-        konamiIndex++;
-        if (konamiIndex === konamiCode.length) {
-            // Easter egg activated!
-            document.body.style.animation = 'rainbow 2s linear infinite';
-
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes rainbow {
-                    0% { filter: hue-rotate(0deg); }
-                    100% { filter: hue-rotate(360deg); }
-                }
-            `;
-            document.head.appendChild(style);
-
-            setTimeout(() => {
-                document.body.style.animation = '';
-                style.remove();
-            }, 5000);
-
-            konamiIndex = 0;
-        }
-    } else {
-        konamiIndex = 0;
-    }
+    // Re-observe dynamically loaded elements
+    document.querySelectorAll('.video-card, .product-card, .insta-post').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(el);
+    });
 });
 
-// ===== Console Easter Egg =====
-console.log('%c GolfCoast Pilot ', 'background: linear-gradient(135deg, #00d4ff, #7c3aed); color: white; font-size: 24px; padding: 10px 20px; border-radius: 10px; font-weight: bold;');
-console.log('%c Welcome to the sky! ', 'color: #00d4ff; font-size: 14px;');
+// ===== Console Message =====
+console.log('%c Andrew Rentz ', 'background: #1a56db; color: white; font-size: 18px; padding: 8px 16px; border-radius: 6px; font-weight: bold;');
+console.log('%c Aviation Content Creator ', 'color: #6b7280; font-size: 12px;');
