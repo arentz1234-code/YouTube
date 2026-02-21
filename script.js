@@ -227,7 +227,7 @@ function renderVideos(videos) {
 }
 
 // ===== Instagram followers count (for hero stats) =====
-const instagramFollowers = 8750;
+const instagramFollowers = 8800;
 
 // ===== Update Hero Stats =====
 async function updateHeroStats() {
