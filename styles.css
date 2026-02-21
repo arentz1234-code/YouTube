@@ -629,9 +629,13 @@ section {
 }
 
 .instagram-grid {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 0.5rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.instagram-grid behold-widget {
+    display: block;
+    width: 100%;
 }
 
 .insta-post {

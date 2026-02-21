@@ -226,34 +226,8 @@ function renderVideos(videos) {
     });
 }
 
-// ===== Instagram Demo Data (requires different API setup) =====
-const instagramData = {
-    followers: 8750,
-    posts: [
-        { image: 'https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=400&h=400&fit=crop', likes: 1243, comments: 89 },
-        { image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=400&h=400&fit=crop', likes: 2156, comments: 124 },
-        { image: 'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=400&h=400&fit=crop', likes: 987, comments: 56 },
-        { image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop', likes: 1534, comments: 78 },
-        { image: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop', likes: 876, comments: 45 },
-        { image: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=400&h=400&fit=crop', likes: 1102, comments: 67 }
-    ]
-};
-
-// ===== Render Instagram Posts =====
-function renderInstagram() {
-    const container = document.getElementById('instagram-container');
-    if (!container) return;
-
-    container.innerHTML = instagramData.posts.map(post => `
-        <a href="https://instagram.com/golfcoastpilot" target="_blank" class="insta-post">
-            <img src="${post.image}" alt="Instagram post" loading="lazy">
-            <div class="insta-overlay">
-                <span class="insta-stat"><i class="fas fa-heart"></i> ${formatNumber(post.likes)}</span>
-                <span class="insta-stat"><i class="fas fa-comment"></i> ${formatNumber(post.comments)}</span>
-            </div>
-        </a>
-    `).join('');
-}
+// ===== Instagram followers count (for hero stats) =====
+const instagramFollowers = 8750;
 
 // ===== Update Hero Stats =====
 async function updateHeroStats() {
@@ -268,8 +242,8 @@ async function updateHeroStats() {
         if (viewsEl) animateCounter(viewsEl, parseInt(stats.viewCount));
     }
 
-    // Instagram followers (demo data for now)
-    if (followersEl) animateCounter(followersEl, instagramData.followers);
+    // Instagram followers
+    if (followersEl) animateCounter(followersEl, instagramFollowers);
 }
 
 // ===== Contact Form =====
@@ -309,9 +283,6 @@ const observer = new IntersectionObserver((entries) => {
 
 // ===== Initialize =====
 async function init() {
-    // Render Instagram (static for now)
-    renderInstagram();
-
     // Fetch and display YouTube data
     const videos = await fetchYouTubeVideos();
     renderVideos(videos);
