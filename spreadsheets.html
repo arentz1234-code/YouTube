@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviation Spreadsheets | Andrew Rentz</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Spreadsheets Page Specific Styles */
+        .spreadsheets-hero {
+            padding: 140px 0 80px;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            text-align: center;
+            color: white;
+        }
+
+        .spreadsheets-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .spreadsheets-hero p {
+            font-size: 1.25rem;
+            color: rgba(255, 255, 255, 0.8);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .products-section {
+            padding: 5rem 0;
+            background: var(--gray-50);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .product-card-large {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .product-card-large:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card-large .product-image {
+            aspect-ratio: 16/10;
+            background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .product-card-large .product-image i {
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .product-card-large .product-details {
+            padding: 1.5rem;
+        }
+
+        .product-card-large h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 0.75rem;
+        }
+
+        .product-card-large p {
+            color: var(--gray-600);
+            font-size: 0.938rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .product-card-large .product-features {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+
+        .product-card-large .product-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card-large .product-features i {
+            color: #10b981;
+            font-size: 0.875rem;
+        }
+
+        .product-card-large .price-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .product-card-large .price {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .btn-buy {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .btn-buy:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .features-section {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-card .icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gray-100);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .feature-card h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            color: var(--gray-600);
+            font-size: 0.938rem;
+        }
+
+        .testimonial-section {
+            padding: 5rem 0;
+            background: var(--gray-50);
+        }
+
+        .testimonial-card {
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+            background: white;
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-card .quote {
+            font-size: 1.25rem;
+            color: var(--gray-700);
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        .testimonial-card .author {
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .testimonial-card .role {
+            color: var(--gray-500);
+            font-size: 0.875rem;
+        }
+
+        .cta-section {
+            padding: 5rem 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            text-align: center;
+            color: white;
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-section .btn-buy {
+            background: white;
+            color: var(--primary);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+        }
+
+        .cta-section .btn-buy:hover {
+            background: var(--gray-100);
+        }
+
+        /* Navbar for spreadsheets page */
+        .navbar-dark {
+            background: rgba(15, 23, 42, 0.95) !important;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-dark .nav-links a {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .navbar-dark .nav-links a:hover,
+        .navbar-dark .nav-links a.active {
+            color: white;
+        }
+
+        .navbar-dark .nav-social a {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .navbar-dark .nav-social a:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-dark .nav-logo {
+            filter: brightness(0) invert(1);
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .spreadsheets-hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-dark">
+        <div class="nav-container">
+            <a href="index.html" class="nav-brand">
+                <img src="logo.png" alt="Andrew Rentz" class="nav-logo">
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="index.html#about">About</a>
+                <a href="index.html#videos">Videos</a>
+                <a href="spreadsheets.html" class="active">Spreadsheets</a>
+                <a href="index.html#shop">Shop</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+            <div class="nav-social">
+                <a href="https://youtube.com/@golfcoastpilot" target="_blank" aria-label="YouTube">
+                    <i class="fab fa-youtube"></i>
+                </a>
+                <a href="https://instagram.com/golfcoastpilot" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+            <button class="mobile-menu-btn" aria-label="Menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="spreadsheets-hero">
+        <div class="container">
+            <h1>Aviation Business Spreadsheets</h1>
+            <p>Professional Excel templates to help you plan your aircraft ownership and make smart financial decisions</p>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section class="products-section">
+        <div class="container">
+            <div class="products-grid">
+                <!-- General Aircraft Business Plan -->
+                <div class="product-card-large">
+                    <div class="product-image">
+                        <i class="fas fa-plane"></i>
+                    </div>
+                    <div class="product-details">
+                        <h3>General Aircraft Business Plan</h3>
+                        <p>A comprehensive spreadsheet for planning aircraft ownership costs, revenue projections, and break-even analysis for any aircraft type.</p>
+                        <ul class="product-features">
+                            <li><i class="fas fa-check"></i> Operating cost calculator</li>
+                            <li><i class="fas fa-check"></i> Revenue projections</li>
+                            <li><i class="fas fa-check"></i> Break-even analysis</li>
+                            <li><i class="fas fa-check"></i> Customizable inputs</li>
+                            <li><i class="fas fa-check"></i> Works with any aircraft</li>
+                        </ul>
+                        <div class="price-row">
+                            <span class="price">$9.99</span>
+                            <a href="https://buy.stripe.com/6oU8wPbaJ0Fk9mjg857AI01" class="btn-buy" target="_blank">
+                                <i class="fas fa-shopping-cart"></i> Buy Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cirrus SR22 Business Plan -->
+                <div class="product-card-large">
+                    <div class="product-image" style="background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);">
+                        <i class="fas fa-plane-departure"></i>
+                    </div>
+                    <div class="product-details">
+                        <h3>Cirrus SR22 Business Plan</h3>
+                        <p>Specialized spreadsheet tailored specifically for Cirrus SR22 owners with pre-filled data and SR22-specific cost calculations.</p>
+                        <ul class="product-features">
+                            <li><i class="fas fa-check"></i> SR22-specific costs pre-filled</li>
+                            <li><i class="fas fa-check"></i> Insurance estimates</li>
+                            <li><i class="fas fa-check"></i> Maintenance schedules</li>
+                            <li><i class="fas fa-check"></i> CAPS repack costs included</li>
+                            <li><i class="fas fa-check"></i> Fuel burn calculations</li>
+                        </ul>
+                        <div class="price-row">
+                            <span class="price">$14.99</span>
+                            <a href="https://buy.stripe.com/4gM14n4MlgEidCz5tr7AI00" class="btn-buy" target="_blank">
+                                <i class="fas fa-shopping-cart"></i> Buy Now
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Why Choose These Spreadsheets</span>
+                <h2>Built By a Pilot, For Pilots</h2>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="icon">
+                        <i class="fas fa-calculator"></i>
+                    </div>
+                    <h3>Accurate Calculations</h3>
+                    <p>Based on real-world operating costs and industry data</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h3>Fully Customizable</h3>
+                    <p>Adjust all inputs to match your specific situation</p>
+                </div>
+                <div class="feature-card">
+                    <div class="icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Instant Download</h3>
+                    <p>Get your spreadsheet immediately after purchase</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonial -->
+    <section class="testimonial-section">
+        <div class="container">
+            <div class="testimonial-card">
+                <p class="quote">"This spreadsheet helped me understand the true costs of aircraft ownership. It was instrumental in making my decision to buy my first plane."</p>
+                <p class="author">Happy Customer</p>
+                <p class="role">Private Pilot & Aircraft Owner</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Plan Your Aircraft Ownership?</h2>
+            <p>Get the tools you need to make informed decisions about your aviation investment.</p>
+            <a href="mailto:golfcoastpilot@gmail.com" class="btn-buy">
+                <i class="fas fa-envelope"></i> Questions? Contact Me
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <a href="index.html">
+                        <img src="logo.png" alt="Andrew Rentz" class="footer-logo">
+                    </a>
+                    <p>Taking you to new heights, one flight at a time.</p>
+                </div>
+                <div class="footer-links">
+                    <div class="footer-col">
+                        <h4>Navigation</h4>
+                        <a href="index.html">Home</a>
+                        <a href="index.html#about">About</a>
+                        <a href="index.html#videos">Videos</a>
+                        <a href="spreadsheets.html">Spreadsheets</a>
+                    </div>
+                    <div class="footer-col">
+                        <h4>Connect</h4>
+                        <a href="https://youtube.com/@golfcoastpilot" target="_blank">YouTube</a>
+                        <a href="https://instagram.com/golfcoastpilot" target="_blank">Instagram</a>
+                        <a href="mailto:golfcoastpilot@gmail.com">Email</a>
+                    </div>
+                </div>
+                <div class="footer-social">
+                    <a href="https://youtube.com/@golfcoastpilot" target="_blank" aria-label="YouTube">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                    <a href="https://instagram.com/golfcoastpilot" target="_blank" aria-label="Instagram">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Andrew Rentz. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+                const icon = mobileMenuBtn.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
+            });
+        }
+    </script>
+</body>
+</html>
