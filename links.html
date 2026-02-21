@@ -288,6 +288,18 @@
             <p class="location">📍 Florida Gulf Coast</p>
         </div>
 
+        <!-- Latest Video (at top) -->
+        <div class="latest-videos" style="margin-bottom: 2rem;">
+            <div class="section-header">
+                <span>📺</span> LATEST VIDEO
+            </div>
+            <div class="video-card" id="latest-video">
+                <div class="loading">
+                    <i class="fas fa-spinner"></i>
+                </div>
+            </div>
+        </div>
+
         <!-- Links -->
         <div class="links">
             <a href="https://youtube.com/@golfcoastpilot?sub_confirmation=1" target="_blank" class="link-button">
@@ -323,18 +335,6 @@
             </a>
         </div>
 
-        <!-- Latest Videos -->
-        <div class="latest-videos">
-            <div class="section-header">
-                <span>📺</span> LATEST VIDEOS
-            </div>
-            <div class="video-card" id="latest-video">
-                <div class="loading">
-                    <i class="fas fa-spinner"></i>
-                </div>
-            </div>
-        </div>
-
         <!-- Footer -->
         <div class="footer">
             <p>golfcoastpilot.com</p>
@@ -363,22 +363,46 @@
             return num + ' views';
         }
 
+        // Parse ISO 8601 duration to seconds
+        function parseDuration(duration) {
+            const match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+            const hours = parseInt(match[1]) || 0;
+            const minutes = parseInt(match[2]) || 0;
+            const seconds = parseInt(match[3]) || 0;
+            return hours * 3600 + minutes * 60 + seconds;
+        }
+
         async function fetchLatestVideo() {
             try {
+                // Fetch more videos to filter out Shorts
                 const searchRes = await fetch(
-                    `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${YOUTUBE_CHANNEL_ID}&maxResults=1&order=date&type=video&key=${YOUTUBE_API_KEY}`
+                    `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${YOUTUBE_CHANNEL_ID}&maxResults=10&order=date&type=video&key=${YOUTUBE_API_KEY}`
                 );
                 const searchData = await searchRes.json();
                 if (!searchData.items?.length) throw new Error('No videos');
 
-                const videoId = searchData.items[0].id.videoId;
-                const snippet = searchData.items[0].snippet;
+                // Get video IDs
+                const videoIds = searchData.items.map(item => item.id.videoId).join(',');
 
-                const statsRes = await fetch(
-                    `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoId}&key=${YOUTUBE_API_KEY}`
+                // Fetch video details including duration
+                const detailsRes = await fetch(
+                    `https://www.googleapis.com/youtube/v3/videos?part=contentDetails,statistics,snippet&id=${videoIds}&key=${YOUTUBE_API_KEY}`
                 );
-                const statsData = await statsRes.json();
-                const viewCount = statsData.items[0]?.statistics?.viewCount || 0;
+                const detailsData = await detailsRes.json();
+
+                // Filter out Shorts (videos under 60 seconds)
+                const regularVideos = detailsData.items.filter(video => {
+                    const durationSeconds = parseDuration(video.contentDetails.duration);
+                    return durationSeconds > 60; // Must be longer than 60 seconds
+                });
+
+                if (!regularVideos.length) throw new Error('No regular videos found');
+
+                // Get the most recent non-Short video
+                const video = regularVideos[0];
+                const videoId = video.id;
+                const snippet = video.snippet;
+                const viewCount = video.statistics.viewCount || 0;
 
                 document.getElementById('latest-video').innerHTML = `
                     <a href="https://www.youtube.com/watch?v=${videoId}" target="_blank" class="video-thumb">
@@ -391,6 +415,7 @@
                     </div>
                 `;
             } catch (e) {
+                console.error('Error:', e);
                 document.getElementById('latest-video').innerHTML = `
                     <a href="https://youtube.com/@golfcoastpilot" target="_blank" class="video-thumb" style="background: #1e293b;">
                         <div class="play-overlay"><i class="fab fa-youtube"></i></div>
