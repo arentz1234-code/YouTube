@@ -650,55 +650,47 @@ section {
 /* Instagram Profile Header */
 .instagram-profile {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    max-width: 800px;
+    align-items: flex-start;
+    gap: 2.5rem;
+    max-width: 600px;
     margin: 0 auto 2.5rem;
-    padding: 2rem 0;
+    padding: 2rem;
+    background: #0f1419;
+    border-radius: 16px;
 }
 
 .instagram-profile-pic {
     flex-shrink: 0;
-    margin-bottom: 1.5rem;
 }
 
 .instagram-profile-pic img {
-    width: 150px;
-    height: 150px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid transparent;
-    background: linear-gradient(white, white) padding-box,
+    background: linear-gradient(#0f1419, #0f1419) padding-box,
                 linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888) border-box;
 }
 
 .instagram-profile-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    flex: 1;
+    color: white;
 }
 
 .instagram-username {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 1.5rem;
-    margin-bottom: 1.25rem;
-}
-
-.instagram-username h2 {
-    font-size: 1.5rem;
-    font-weight: 400;
-    color: var(--gray-900);
+    gap: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .btn-follow {
     background: #0095f6;
     color: white;
-    padding: 0.5rem 1.25rem;
+    padding: 0.4rem 1rem;
     border-radius: 8px;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
     font-weight: 600;
     transition: background 0.2s ease;
 }
@@ -709,14 +701,13 @@ section {
 
 .instagram-stats {
     display: flex;
-    justify-content: center;
-    gap: 2.5rem;
-    margin-bottom: 1.25rem;
+    gap: 1.5rem;
+    margin-bottom: 0.75rem;
 }
 
 .instagram-stat-item {
-    font-size: 1rem;
-    color: var(--gray-900);
+    font-size: 0.9rem;
+    color: white;
 }
 
 .instagram-stat-item strong {
@@ -724,19 +715,24 @@ section {
 }
 
 .instagram-bio {
-    color: var(--gray-900);
-    font-size: 0.938rem;
-    line-height: 1.5;
+    color: white;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    margin-bottom: 0.5rem;
 }
 
 .instagram-bio strong {
     display: block;
     font-weight: 600;
-    margin-bottom: 0.25rem;
 }
 
-.instagram-bio p {
-    color: var(--gray-700);
+.instagram-bio-details {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.instagram-bio-details p {
     margin: 0;
 }
 
