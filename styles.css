@@ -650,8 +650,9 @@ section {
 /* Instagram Profile Header */
 .instagram-profile {
     display: flex;
-    align-items: flex-start;
-    gap: 3rem;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     max-width: 800px;
     margin: 0 auto 2.5rem;
     padding: 2rem 0;
@@ -659,6 +660,7 @@ section {
 
 .instagram-profile-pic {
     flex-shrink: 0;
+    margin-bottom: 1.5rem;
 }
 
 .instagram-profile-pic img {
@@ -672,12 +674,15 @@ section {
 }
 
 .instagram-profile-info {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .instagram-username {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 1.5rem;
     margin-bottom: 1.25rem;
 }
@@ -704,6 +709,7 @@ section {
 
 .instagram-stats {
     display: flex;
+    justify-content: center;
     gap: 2.5rem;
     margin-bottom: 1.25rem;
 }
