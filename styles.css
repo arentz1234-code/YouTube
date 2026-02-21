@@ -555,6 +555,24 @@ section {
     gap: 1.5rem;
 }
 
+.shop-grid-2 {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.product-image-icon {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f172a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-image-icon i {
+    font-size: 4rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
 .product-card {
     background: var(--white);
     border: 1px solid var(--gray-200);
@@ -910,6 +928,10 @@ section {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .shop-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
     .instagram-grid {
         grid-template-columns: repeat(3, 1fr);
     }
@@ -1001,6 +1023,10 @@ section {
     }
 
     .shop-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .shop-grid-2 {
         grid-template-columns: 1fr;
     }
 
