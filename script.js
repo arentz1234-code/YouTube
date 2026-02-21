@@ -1,5 +1,9 @@
 // ===== Andrew Rentz - Aviation Content Creator =====
 
+// YouTube API Configuration
+const YOUTUBE_API_KEY = 'AIzaSyBGmol2j-ojhCDF01e9V6EUCn4eOQiMMwA';
+const YOUTUBE_CHANNEL_ID = 'UCiJ7ASrsSfJbTAcF1VLV6nA';
+
 // ===== Smooth Scroll Navigation =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function(e) {
@@ -10,7 +14,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 behavior: 'smooth',
                 block: 'start'
             });
-            // Close mobile menu if open
             document.querySelector('.nav-links')?.classList.remove('active');
         }
     });
@@ -90,76 +93,111 @@ function animateCounter(element, target, duration = 2000) {
     updateCounter();
 }
 
-// ===== Demo Data =====
-const socialData = {
-    youtube: {
-        subscribers: 15400,
-        views: 2340000,
-        videos: [
-            {
-                title: 'Epic Gulf Coast Sunset Flight - 4K Cockpit View',
-                thumbnail: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=800&h=450&fit=crop',
-                views: 245000,
-                duration: '18:32',
-                date: '2 weeks ago'
-            },
-            {
-                title: 'Learning to Fly: My First Solo Flight Experience',
-                thumbnail: 'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=800&h=450&fit=crop',
-                views: 189000,
-                duration: '24:15',
-                date: '1 month ago'
-            },
-            {
-                title: 'Cessna 172 Complete Pre-Flight Checklist',
-                thumbnail: 'https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=800&h=450&fit=crop',
-                views: 156000,
-                duration: '12:48',
-                date: '3 weeks ago'
-            },
-            {
-                title: 'Flying Through Weather: IFR Training Day',
-                thumbnail: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=800&h=450&fit=crop',
-                views: 134000,
-                duration: '21:07',
-                date: '1 month ago'
-            },
-            {
-                title: 'Beach Landing! Exploring Remote Airstrips',
-                thumbnail: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=800&h=450&fit=crop',
-                views: 112000,
-                duration: '15:33',
-                date: '2 months ago'
-            },
-            {
-                title: 'Night Flying Over the City Lights',
-                thumbnail: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=800&h=450&fit=crop',
-                views: 98000,
-                duration: '19:22',
-                date: '2 months ago'
-            }
-        ]
-    },
-    instagram: {
-        followers: 8750,
-        posts: [
-            { image: 'https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=400&h=400&fit=crop', likes: 1243, comments: 89 },
-            { image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=400&h=400&fit=crop', likes: 2156, comments: 124 },
-            { image: 'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=400&h=400&fit=crop', likes: 987, comments: 56 },
-            { image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop', likes: 1534, comments: 78 },
-            { image: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop', likes: 876, comments: 45 },
-            { image: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=400&h=400&fit=crop', likes: 1102, comments: 67 }
-        ]
+// ===== Format relative time =====
+function timeAgo(dateString) {
+    const date = new Date(dateString);
+    const now = new Date();
+    const seconds = Math.floor((now - date) / 1000);
+
+    const intervals = {
+        year: 31536000,
+        month: 2592000,
+        week: 604800,
+        day: 86400,
+        hour: 3600,
+        minute: 60
+    };
+
+    for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+        const interval = Math.floor(seconds / secondsInUnit);
+        if (interval >= 1) {
+            return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+        }
     }
-};
+    return 'Just now';
+}
+
+// ===== Format duration from ISO 8601 =====
+function formatDuration(isoDuration) {
+    const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/);
+    if (!match) return '0:00';
+
+    const hours = parseInt(match[1]) || 0;
+    const minutes = parseInt(match[2]) || 0;
+    const seconds = parseInt(match[3]) || 0;
+
+    if (hours > 0) {
+        return `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+}
+
+// ===== Fetch YouTube Channel Stats =====
+async function fetchYouTubeStats() {
+    try {
+        const response = await fetch(
+            `https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${YOUTUBE_CHANNEL_ID}&key=${YOUTUBE_API_KEY}`
+        );
+        const data = await response.json();
+
+        if (data.items && data.items.length > 0) {
+            return data.items[0].statistics;
+        }
+    } catch (error) {
+        console.error('Error fetching YouTube stats:', error);
+    }
+    return null;
+}
+
+// ===== Fetch YouTube Popular Videos =====
+async function fetchYouTubeVideos() {
+    try {
+        // First get video IDs from channel
+        const searchResponse = await fetch(
+            `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${YOUTUBE_CHANNEL_ID}&maxResults=6&order=viewCount&type=video&key=${YOUTUBE_API_KEY}`
+        );
+        const searchData = await searchResponse.json();
+
+        if (!searchData.items || searchData.items.length === 0) {
+            return [];
+        }
+
+        // Get video IDs
+        const videoIds = searchData.items.map(item => item.id.videoId).join(',');
+
+        // Fetch video details (for view counts and duration)
+        const videosResponse = await fetch(
+            `https://www.googleapis.com/youtube/v3/videos?part=statistics,contentDetails,snippet&id=${videoIds}&key=${YOUTUBE_API_KEY}`
+        );
+        const videosData = await videosResponse.json();
+
+        return videosData.items.map(video => ({
+            id: video.id,
+            title: video.snippet.title,
+            thumbnail: video.snippet.thumbnails.high?.url || video.snippet.thumbnails.medium?.url,
+            views: parseInt(video.statistics.viewCount),
+            duration: formatDuration(video.contentDetails.duration),
+            date: timeAgo(video.snippet.publishedAt),
+            url: `https://www.youtube.com/watch?v=${video.id}`
+        }));
+    } catch (error) {
+        console.error('Error fetching YouTube videos:', error);
+    }
+    return [];
+}
 
 // ===== Render Videos =====
-function renderVideos() {
+function renderVideos(videos) {
     const container = document.getElementById('videos-container');
     if (!container) return;
 
-    container.innerHTML = socialData.youtube.videos.map(video => `
-        <article class="video-card" onclick="window.open('https://youtube.com/@golfcoastpilot', '_blank')">
+    if (videos.length === 0) {
+        container.innerHTML = '<p style="text-align: center; color: var(--gray-500);">Loading videos...</p>';
+        return;
+    }
+
+    container.innerHTML = videos.map(video => `
+        <article class="video-card" onclick="window.open('${video.url}', '_blank')">
             <div class="video-thumb">
                 <img src="${video.thumbnail}" alt="${video.title}" loading="lazy">
                 <div class="video-overlay">
@@ -178,14 +216,35 @@ function renderVideos() {
             </div>
         </article>
     `).join('');
+
+    // Re-observe for animations
+    document.querySelectorAll('.video-card').forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(el);
+    });
 }
+
+// ===== Instagram Demo Data (requires different API setup) =====
+const instagramData = {
+    followers: 8750,
+    posts: [
+        { image: 'https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=400&h=400&fit=crop', likes: 1243, comments: 89 },
+        { image: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?w=400&h=400&fit=crop', likes: 2156, comments: 124 },
+        { image: 'https://images.unsplash.com/photo-1474302770737-173ee21bab63?w=400&h=400&fit=crop', likes: 987, comments: 56 },
+        { image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=400&h=400&fit=crop', likes: 1534, comments: 78 },
+        { image: 'https://images.unsplash.com/photo-1464037866556-6812c9d1c72e?w=400&h=400&fit=crop', likes: 876, comments: 45 },
+        { image: 'https://images.unsplash.com/photo-1507608616759-54f48f0af0ee?w=400&h=400&fit=crop', likes: 1102, comments: 67 }
+    ]
+};
 
 // ===== Render Instagram Posts =====
 function renderInstagram() {
     const container = document.getElementById('instagram-container');
     if (!container) return;
 
-    container.innerHTML = socialData.instagram.posts.map(post => `
+    container.innerHTML = instagramData.posts.map(post => `
         <a href="https://instagram.com/golfcoastpilot" target="_blank" class="insta-post">
             <img src="${post.image}" alt="Instagram post" loading="lazy">
             <div class="insta-overlay">
@@ -197,14 +256,20 @@ function renderInstagram() {
 }
 
 // ===== Update Hero Stats =====
-function updateHeroStats() {
+async function updateHeroStats() {
+    const stats = await fetchYouTubeStats();
+
     const subsEl = document.getElementById('hero-subs');
     const followersEl = document.getElementById('hero-followers');
     const viewsEl = document.getElementById('hero-views');
 
-    if (subsEl) animateCounter(subsEl, socialData.youtube.subscribers);
-    if (followersEl) animateCounter(followersEl, socialData.instagram.followers);
-    if (viewsEl) animateCounter(viewsEl, socialData.youtube.views);
+    if (stats) {
+        if (subsEl) animateCounter(subsEl, parseInt(stats.subscriberCount));
+        if (viewsEl) animateCounter(viewsEl, parseInt(stats.viewCount));
+    }
+
+    // Instagram followers (demo data for now)
+    if (followersEl) animateCounter(followersEl, instagramData.followers);
 }
 
 // ===== Contact Form =====
@@ -242,30 +307,29 @@ const observer = new IntersectionObserver((entries) => {
     });
 }, observerOptions);
 
-// Observe elements for fade-in animation
-document.querySelectorAll('.video-card, .product-card, .insta-post').forEach(el => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(20px)';
-    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-    observer.observe(el);
-});
-
 // ===== Initialize =====
-document.addEventListener('DOMContentLoaded', () => {
-    renderVideos();
+async function init() {
+    // Render Instagram (static for now)
     renderInstagram();
 
-    // Delay stats animation until hero is visible
-    setTimeout(updateHeroStats, 500);
+    // Fetch and display YouTube data
+    const videos = await fetchYouTubeVideos();
+    renderVideos(videos);
 
-    // Re-observe dynamically loaded elements
-    document.querySelectorAll('.video-card, .product-card, .insta-post').forEach(el => {
+    // Update stats with animation
+    await updateHeroStats();
+
+    // Observe elements for animations
+    document.querySelectorAll('.product-card, .insta-post').forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(20px)';
         el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
         observer.observe(el);
     });
-});
+}
+
+// Start the app
+document.addEventListener('DOMContentLoaded', init);
 
 // ===== Console Message =====
 console.log('%c Andrew Rentz ', 'background: #1a56db; color: white; font-size: 18px; padding: 8px 16px; border-radius: 6px; font-weight: bold;');
