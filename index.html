@@ -233,45 +233,131 @@
     <!-- Contact Section -->
     <section id="contact" class="contact-section">
         <div class="container">
-            <div class="contact-grid">
-                <div class="contact-info">
-                    <span class="section-label">Get In Touch</span>
-                    <h2>Let's Connect</h2>
-                    <p>Interested in collaborations, sponsorships, or just want to chat about aviation? I'd love to hear from you!</p>
-                    <div class="contact-methods">
-                        <a href="mailto:golfcoastpilot@gmail.com" class="contact-method">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <strong>Email</strong>
-                                <span>golfcoastpilot@gmail.com</span>
-                            </div>
-                        </a>
-                        <a href="https://youtube.com/@golfcoastpilot" target="_blank" class="contact-method">
-                            <i class="fab fa-youtube"></i>
-                            <div>
-                                <strong>YouTube</strong>
-                                <span>@golfcoastpilot</span>
-                            </div>
-                        </a>
-                        <a href="https://instagram.com/golfcoastpilot" target="_blank" class="contact-method">
-                            <i class="fab fa-instagram"></i>
-                            <div>
-                                <strong>Instagram</strong>
-                                <span>@golfcoastpilot</span>
-                            </div>
-                        </a>
-                        <a href="https://tiktok.com/@golfcoastpilot" target="_blank" class="contact-method">
-                            <i class="fab fa-tiktok"></i>
-                            <div>
-                                <strong>TikTok</strong>
-                                <span>@golfcoastpilot</span>
-                            </div>
-                        </a>
+            <div class="section-header">
+                <span class="section-label">Flight Training</span>
+                <h2>Book Me as Your CFI</h2>
+                <p>Looking for a certified flight instructor? I offer training throughout the Southeast region.</p>
+            </div>
+            <div class="cfi-grid">
+                <div class="cfi-form-wrapper">
+                    <form class="cfi-form" id="cfi-form">
+                        <div class="form-group">
+                            <label for="cfi-name">Name</label>
+                            <input type="text" id="cfi-name" name="name" required placeholder="Your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="cfi-email">Email</label>
+                            <input type="email" id="cfi-email" name="email" required placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="cfi-phone">Phone</label>
+                            <input type="tel" id="cfi-phone" name="phone" placeholder="(555) 123-4567">
+                        </div>
+                        <div class="form-group">
+                            <label for="cfi-location">Your Location/Airport</label>
+                            <input type="text" id="cfi-location" name="location" required placeholder="e.g., KMGM, Montgomery AL">
+                        </div>
+                        <div class="form-group">
+                            <label for="cfi-training">Training Interest</label>
+                            <select id="cfi-training" name="training">
+                                <option value="private">Private Pilot</option>
+                                <option value="instrument">Instrument Rating</option>
+                                <option value="commercial">Commercial Pilot</option>
+                                <option value="cfi">CFI/CFII</option>
+                                <option value="bfr">Flight Review (BFR)</option>
+                                <option value="ipc">IPC</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="cfi-message">Message</label>
+                            <textarea id="cfi-message" name="message" rows="3" placeholder="Tell me about your training goals..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-paper-plane"></i> Send Inquiry
+                        </button>
+                    </form>
+                    <div class="cfi-contact-alt">
+                        <p>Or email me directly at <a href="mailto:golfcoastpilot@gmail.com">golfcoastpilot@gmail.com</a></p>
                     </div>
+                </div>
+                <div class="cfi-map-wrapper">
+                    <h3><i class="fas fa-map-marked-alt"></i> Service Area</h3>
+                    <div id="service-map"></div>
+                    <p class="map-note">I provide flight instruction throughout Alabama, Georgia, and Florida. Contact me to discuss training at your local airport!</p>
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Leaflet CSS & JS for map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize map centered on service area
+            const map = L.map('service-map').setView([32.0, -85.5], 6);
+
+            // Add dark tile layer
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+                maxZoom: 19
+            }).addTo(map);
+
+            // Service area polygon: Montgomery → Birmingham → Atlanta → Gainesville → Pensacola → Montgomery
+            const serviceArea = [
+                [32.3792, -86.3077],  // Montgomery, AL
+                [33.5207, -86.8025],  // Birmingham, AL
+                [33.7490, -84.3880],  // Atlanta, GA
+                [29.6516, -82.3248],  // Gainesville, FL
+                [30.4213, -87.2169],  // Pensacola, FL
+            ];
+
+            // Draw the polygon
+            L.polygon(serviceArea, {
+                color: '#3b82f6',
+                weight: 3,
+                fillColor: '#3b82f6',
+                fillOpacity: 0.2
+            }).addTo(map);
+
+            // Add city markers
+            const cities = [
+                { coords: [32.3792, -86.3077], name: 'Montgomery' },
+                { coords: [33.5207, -86.8025], name: 'Birmingham' },
+                { coords: [33.7490, -84.3880], name: 'Atlanta' },
+                { coords: [29.6516, -82.3248], name: 'Gainesville' },
+                { coords: [30.4213, -87.2169], name: 'Pensacola' }
+            ];
+
+            cities.forEach(city => {
+                L.circleMarker(city.coords, {
+                    radius: 6,
+                    fillColor: '#f97316',
+                    color: '#fff',
+                    weight: 2,
+                    fillOpacity: 1
+                }).addTo(map).bindPopup(city.name);
+            });
+        });
+
+        // Form submission
+        const cfiForm = document.getElementById('cfi-form');
+        if (cfiForm) {
+            cfiForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const btn = cfiForm.querySelector('button[type="submit"]');
+                const originalText = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Inquiry Sent!';
+                btn.style.background = '#10b981';
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.style.background = '';
+                    cfiForm.reset();
+                }, 3000);
+            });
+        }
+    </script>
 
     <!-- Footer -->
     <footer class="footer">

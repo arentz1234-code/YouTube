@@ -1061,6 +1061,98 @@ section {
     min-height: 100px;
 }
 
+/* ===== CFI Booking Section ===== */
+.cfi-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 2rem;
+}
+
+.cfi-form-wrapper {
+    background: var(--gray-50);
+    padding: 2rem;
+    border-radius: var(--radius-xl);
+}
+
+.cfi-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.cfi-form .form-group {
+    gap: 0.375rem;
+}
+
+.cfi-form input,
+.cfi-form select,
+.cfi-form textarea {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.938rem;
+}
+
+.cfi-form textarea {
+    min-height: 80px;
+}
+
+.cfi-contact-alt {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gray-200);
+    text-align: center;
+    color: var(--gray-600);
+    font-size: 0.875rem;
+}
+
+.cfi-contact-alt a {
+    color: var(--primary);
+    font-weight: 500;
+}
+
+.cfi-map-wrapper {
+    background: var(--gray-900);
+    border-radius: var(--radius-xl);
+    padding: 1.5rem;
+    color: white;
+}
+
+.cfi-map-wrapper h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.cfi-map-wrapper h3 i {
+    color: var(--primary-light);
+}
+
+#service-map {
+    height: 350px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+}
+
+.map-note {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .cfi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    #service-map {
+        height: 280px;
+    }
+}
+
 /* ===== Footer ===== */
 .footer {
     background: var(--gray-900);
