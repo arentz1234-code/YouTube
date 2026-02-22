@@ -190,8 +190,8 @@ async function fetchYouTubeVideos() {
             url: `https://www.youtube.com/watch?v=${video.id}`
         }));
 
-        // Separate long-form videos (> 60 seconds) from Shorts (<= 60 seconds)
-        const longForm = allVideos.filter(v => v.durationSeconds > 60).slice(0, 3);
+        // Separate long-form videos (> 3 minutes) from Shorts (<= 60 seconds)
+        const longForm = allVideos.filter(v => v.durationSeconds > 180).slice(0, 3);
         const shorts = allVideos.filter(v => v.durationSeconds <= 60).slice(0, 4);
 
         return { longForm, shorts };
